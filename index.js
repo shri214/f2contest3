@@ -11,20 +11,25 @@ var puppeteer = require("puppeteer");
     let a = Array.from(document.querySelectorAll(".Box-row"));
     a.forEach((ele, i) => {
       let tit = ele.querySelectorAll("h1")[0].textContent.trim();
-      let dis = ele.querySelectorAll("p")[0].textContent.trim();
-      let url = ele.querySelectorAll(".h3 a")[0].getAttribute("href");
-      let stars = ele
-        .querySelectorAll(".color-fg-muted ")[2]
-        .querySelectorAll("a")[0]
-        .textContent.trim();
-      let forks = ele
-        .querySelectorAll(".color-fg-muted ")[2]
-        .querySelectorAll("a")[1]
-        .textContent.trim();
-      let languages = ele
-        .querySelectorAll(".color-fg-muted ")[2]
-        .querySelectorAll("span")[0]
-        .textContent.trim();
+      let dis = "";
+      let url = "";
+      let stars = "";
+      let forks = "";
+      let languages = "";
+      if (ele.querySelector("p")) {
+        dis = ele.querySelectorAll("p")[0].textContent.trim();
+      }
+
+      url = ele.querySelectorAll(".h3 a")[0].getAttribute("href");
+      stars = ele
+        .querySelector("div[class='f6 color-fg-muted mt-2']")
+        .querySelectorAll("a")[0].innerText;
+      forks = ele
+        .querySelector("div[class='f6 color-fg-muted mt-2']")
+        .querySelectorAll("a")[1].innerText;
+      languages = ele
+        .querySelector("div[class='f6 color-fg-muted mt-2']")
+        .querySelectorAll("span")[0].innerText;
       let obj = {
         title: tit,
         description: dis,
@@ -37,15 +42,17 @@ var puppeteer = require("puppeteer");
     });
     repositories["repositories"] = ans;
     return repositories;
+    // return ans;
   });
+  console.log(repo);
   const json_data = JSON.stringify(repo);
-  //   fs.writeFile("json1.json", json_data, (err) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log("done");
-  //     }
-  //   });
+  fs.writeFile("json1.json", json_data, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("done");
+    }
+  });
   fs.readFile("json1.json", "utf-8", (err, data) => {
     const org_data = JSON.parse(data);
     console.log(org_data);
